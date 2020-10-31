@@ -39,8 +39,10 @@ ThreadedKernel::ThreadedKernel(int argc, char **argv)
 	} else if(strcmp(argv[i], "RR") == 0) {
             type = RR;
         } else if (strcmp(argv[i], "FCFS") == 0) {
-            type = FIFO;
+            
+		type = FIFO;
         } else if (strcmp(argv[i], "PRIORITY") == 0) {
+	    DEBUG(dbscheduler,"use priority");
             type = Priority;
         } else if (strcmp(argv[i], "SJF") == 0) {
             type = SJF;

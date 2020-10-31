@@ -30,24 +30,8 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 		}
 		else if (strcmp(argv[i], "-e") == 0) {
 			execfile[++execfileNum]= argv[++i];
-			if (strcmp(argv[i], "-prio") == 0)
-			{
-				execfilePriority[execfileNum] = atoi(argv[++i]);
-				if (strcmp(argv[i], "-burst") == 0)
-				{
-					execfileBurstTime[execfileNum] = atoi(argv[++i]);
-				}
-			}
-			else if(strcmp(argv[i], "-burst") == 0)
-			{
-				execfileBurstTime[execfileNum] = atoi(argv[++i]);
-				if(strcmp(argv[i], "-prio") == 0)
-				{
-					execfilePriority[execfileNum] = atoi(argv[++i]);
-				}
-			}
 		}
-			else if (strcmp(argv[i], "-u") == 0) {
+		else if (strcmp(argv[i], "-u") == 0) {
 			cout << "===========The following argument is defined in userkernel.cc" << endl;
 			cout << "Partial usage: nachos [-s]\n";
 			cout << "Partial usage: nachos [-u]" << endl;
@@ -61,6 +45,23 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 			cout << "	./nachos -s : Print machine status during the machine is on." << endl;
 			cout << "	./nachos -e file1 -e file2 : executing file1 and file2."  << endl;
 		}
+		else if (strcmp(argv[i], "-prio") == 0)
+		{		
+			execfilePriority[execfileNum] = atoi(argv[++i]);
+			if (strcmp(argv[i], "-burst") == 0)
+			{
+				execfileBurstTime[execfileNum] = atoi(argv[++i]);
+			}
+		}
+		else if(strcmp(argv[i], "-burst") == 0)
+		{
+			execfileBurstTime[execfileNum] = atoi(argv[++i]);
+			if(strcmp(argv[i], "-prio") == 0)
+			{
+				execfilePriority[execfileNum] = atoi(argv[++i]);
+			}
+		}
+
     }
 }
 
@@ -116,7 +117,8 @@ UserProgKernel::Run()
 		t[n]->space = new AddrSpace();
 		t[n]->setPriority(execfilePriority[n]);
 		t[n]->setBurstTime(execfileBurstTime[n]);
-		
+		DEBUG(dbscheduler, execfile[n]);
+		DEBUG(dbscheduler, execfilePriority[n]);		
 		t[n]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[n]);
 		cout << "Thread " << execfile[n] << " is executing." << endl;
 		}
