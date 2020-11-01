@@ -222,6 +222,7 @@ Thread::Yield ()
     
     totalBurst += kernel->stats->userTicks - this->startTime;
     totalWaiting += this->startTime - this->arrivalTime;
+    
     arrivalTime = kernel->stats->userTicks;
     
     ASSERT(this == kernel->currentThread);
@@ -232,6 +233,9 @@ Thread::Yield ()
     if (nextThread != NULL) {
         kernel->scheduler->ReadyToRun(this);
         kernel->scheduler->Run(nextThread, FALSE);
+    }
+    else{
+    	startTime = kernel->stats->userTicks;
     }
     
     (void) kernel->interrupt->SetLevel(oldLevel);

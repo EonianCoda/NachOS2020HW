@@ -145,12 +145,6 @@ Scheduler::Run (Thread *nextThread, bool finishing)
 
     if (finishing) {	// mark that we need to delete current thread
         ASSERT(toBeDestroyed == NULL);
-        #ifdef USER_PROGRAM
-        if (strcmp(oldThread->getName(), "main") != 0){
-	    cout << "addwaiting time" << endl;
-            kernel->addTotalWaiting(oldThread->totalWaiting + oldThread->startTime - oldThread->arrivalTime);
-        }
-	#endif
         toBeDestroyed = oldThread;
     }
     
