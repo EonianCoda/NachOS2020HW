@@ -54,12 +54,17 @@ Alarm::CallBack()
     kernel->currentThread->setPriority(kernel->currentThread->getPriority() - 1);
     if (status == IdleMode) {	// is it time to quit?
         if (!interrupt->AnyFutureInterrupts()) {
-	    timer->Disable();	// turn off the timer
-	}
-    } else {			// there's someone to preempt
-	if(kernel->scheduler->getSchedulerType() == RR){
-		interrupt->YieldOnReturn();
-	}
+            timer->Disable();	// turn off the timer
+            //output average waiting time
+            #ifdef USER_PROGRAM
+            cout << "Average Waiting Time: " << (float)kernel->getTotalWaiting() / kernel->getexecfileNum();
+            #endif
+        }
+    } 
+    else {// there's someone to preempt
+        if(kernel->scheduler->getSchedulerType() == RR){
+            interrupt->YieldOnReturn();
+        }
     }
 }
 

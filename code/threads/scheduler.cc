@@ -137,14 +137,20 @@ void
 Scheduler::Run (Thread *nextThread, bool finishing)
 {
     Thread *oldThread = kernel->currentThread;
- 
+    
 //	cout << "Current Thread" <<oldThread->getName() << "    Next Thread"<<nextThread->getName()<<endl;
-   
+    
+    nextThread->startTime = kernel->stats->userTicks();
     ASSERT(kernel->interrupt->getLevel() == IntOff);
 
     if (finishing) {	// mark that we need to delete current thread
-         ASSERT(toBeDestroyed == NULL);
-	 toBeDestroyed = oldThread;
+        ASSERT(toBeDestroyed == NULL);
+        #ifdef USER_PROGRAM
+        if (strcmp(oldThread->name, "main") != 0){
+            kernel->addTotalWaiting(totalWaiting + oldThread->startTime - oldThread->arrivalTime);
+        }
+	    #endif
+        toBeDestroyed = oldThread;
     }
     
 #ifdef USER_PROGRAM			// ignore until running user programs 

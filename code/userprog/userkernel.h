@@ -26,8 +26,12 @@ class UserProgKernel : public ThreadedKernel {
     void Initialize();		// initialize the kernel 
 
     void Run();			// do kernel stuff 
-
+    int getexecfileNum() {return execfileNum; }
+    int getTotalWaiting() {return totalWaiting; }
+    void addTotalWaiting(int num) {totalWaiting += num; }
     void SelfTest();		// test whether kernel is working
+    
+
 // These are public for notational convenience.
     Machine *machine;
     FileSystem *fileSystem;
@@ -43,6 +47,7 @@ class UserProgKernel : public ThreadedKernel {
   int execfilePriority[10];
   int execfileBurstTime[10];
 	int	execfileNum;
+  int totalWaiting = 0;
 };
 
 #endif //USERKERNEL_H

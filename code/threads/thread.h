@@ -111,6 +111,10 @@ class Thread {
     void Print() { cout << name; }
     void SelfTest();		// test whether thread impl is working
 
+    int arrivalTime;
+    int startTime;
+    int totalBurst;
+    int totalWaiting;
   private:
     // some of the private data for this class is listed above
     
@@ -121,8 +125,7 @@ class Thread {
     char* name;
     int burstTime;
     int priority;	
-    int arrivalTime;
-    int startTime;
+
     void StackAllocate(VoidFunctionPtr func, void *arg);
     				// Allocate a stack for thread.
 				// Used internally by Fork()
