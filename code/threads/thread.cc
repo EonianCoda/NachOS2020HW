@@ -151,6 +151,7 @@ Thread::Begin ()
     ASSERT(this == kernel->currentThread);
     DEBUG(dbgThread, "Beginning thread: " << name);
     
+//    kerne->stats->userTicks    
     kernel->scheduler->CheckToBeDestroyed();
     kernel->interrupt->Enable();
 }

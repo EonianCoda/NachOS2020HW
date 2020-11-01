@@ -17,6 +17,13 @@
 //	for the initialization (see also comments in main.cc)  
 //----------------------------------------------------------------------
 
+void UserProgKernel::getexecfileNum(){
+	return execfileNum;
+}
+void UserProgKernel::tellName(){
+	cout << "my name is userKernel" << endl;
+}
+
 
 UserProgKernel::UserProgKernel(int argc, char **argv) 
 		: ThreadedKernel(argc, argv)

@@ -70,12 +70,14 @@ main(int argc, char **argv)
             cout << copyright;
 	}
     }
+    cout << "main execute" << endl;
     debug = new Debug(debugArg);
     
     DEBUG(dbgThread, "Entering main");
 
     kernel = new KernelType(argc, argv);
-    kernel->Initialize();   
+    kernel->Initialize();
+    kernel->tellName();    
     CallOnUserAbort(Cleanup);		// if user hits ctl-C
 
     kernel->SelfTest();
