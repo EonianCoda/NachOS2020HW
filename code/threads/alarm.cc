@@ -57,7 +57,7 @@ Alarm::CallBack()
             timer->Disable();	// turn off the timer
             //output average waiting time
             #ifdef USER_PROGRAM
-            cout << "Average Waiting Time: " << (float)kernel->getTotalWaiting() / kernel->getexecfileNum();
+            cout << "Average Waiting Time: " << (float)kernel->getTotalWaiting() / kernel->getexecfileNum() << endl;
             #endif
         }
     } 

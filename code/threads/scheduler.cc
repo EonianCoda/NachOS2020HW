@@ -6,7 +6,7 @@
 //	If interrupts are disabled, we can assume mutual exclusion
 //	(since we are on a uniprocessor).
 //
-// 	NOTE: We can't use Locks to provide mutual exclusion here, since
+/// 	NOTE: We can't use Locks to provide mutual exclusion here, since
 // 	if we needed to wait for a lock, and the lock was busy, we would 
 //	end up calling FindNextToRun(), and that would put us in an 
 //	infinite loop.
@@ -140,16 +140,17 @@ Scheduler::Run (Thread *nextThread, bool finishing)
     
 //	cout << "Current Thread" <<oldThread->getName() << "    Next Thread"<<nextThread->getName()<<endl;
     
-    nextThread->startTime = kernel->stats->userTicks();
+    nextThread->startTime = kernel->stats->userTicks;
     ASSERT(kernel->interrupt->getLevel() == IntOff);
 
     if (finishing) {	// mark that we need to delete current thread
         ASSERT(toBeDestroyed == NULL);
         #ifdef USER_PROGRAM
-        if (strcmp(oldThread->name, "main") != 0){
-            kernel->addTotalWaiting(totalWaiting + oldThread->startTime - oldThread->arrivalTime);
+        if (strcmp(oldThread->getName(), "main") != 0){
+	    cout << "addwaiting time" << endl;
+            kernel->addTotalWaiting(oldThread->totalWaiting + oldThread->startTime - oldThread->arrivalTime);
         }
-	    #endif
+	#endif
         toBeDestroyed = oldThread;
     }
     

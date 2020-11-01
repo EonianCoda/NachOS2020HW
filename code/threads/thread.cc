@@ -156,8 +156,7 @@ Thread::Begin ()
 {
     ASSERT(this == kernel->currentThread);
     DEBUG(dbgThread, "Beginning thread: " << name);
-    
-//    kerne->stats->userTicks    
+        
     kernel->scheduler->CheckToBeDestroyed();
     kernel->interrupt->Enable();
 }
@@ -184,7 +183,7 @@ Thread::Finish ()
     ASSERT(this == kernel->currentThread);
     
     cout << "Thread "<< name << " BurstTime:" << 
-    (kernel->stats->userTicks() - this->startTime) + this->totalBurst << endl;
+    (kernel->stats->userTicks - this->startTime) + this->totalBurst << endl;
 
     DEBUG(dbgThread, "Finishing thread: " << name);
     
@@ -216,9 +215,9 @@ Thread::Yield ()
     Thread *nextThread;
     IntStatus oldLevel = kernel->interrupt->SetLevel(IntOff);
     
-    totalBurst += kernel->stats->userTicks() - this->startTime;
+    totalBurst += kernel->stats->userTicks - this->startTime;
     totalWaiting += this->startTime - this->arrivalTime;
-    arrivalTime = kernel->stats->userTicks();
+    arrivalTime = kernel->stats->userTicks;
     
     ASSERT(this == kernel->currentThread);
     

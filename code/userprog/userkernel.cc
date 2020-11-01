@@ -113,6 +113,7 @@ UserProgKernel::Run()
 		DEBUG(dbscheduler, execfile[n]);
 		DEBUG(dbscheduler, execfilePriority[n]);		
 		t[n]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[n]);
+		t[n]->arrivalTime = kernel->stats->userTicks;
 		cout << "Thread " << execfile[n] << " is executing." << endl;
 		}
 //	Thread *t1 = new Thread(execfile[1]);
