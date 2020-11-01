@@ -184,6 +184,11 @@ Thread::Finish ()
     
     cout << "Thread "<< name << " BurstTime:" << 
     (kernel->stats->userTicks - this->startTime) + this->totalBurst << endl;
+    #ifdef USER_PROGRAM
+    if (strcmp(name, "main") != 0){
+        kernel->addTotalWaiting(totalWaiting + startTime - arrivalTime);
+    }
+    #endif
 
     DEBUG(dbgThread, "Finishing thread: " << name);
     
