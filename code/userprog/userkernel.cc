@@ -21,6 +21,7 @@
 UserProgKernel::UserProgKernel(int argc, char **argv) 
 		: ThreadedKernel(argc, argv)
 {
+    totalWaiting = 0;
     debugUserProg = FALSE;
 	execfileNum=0;
 	memset(execfilePriority, 0, 10);

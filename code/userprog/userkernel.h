@@ -47,7 +47,7 @@ class UserProgKernel : public ThreadedKernel {
   int execfilePriority[10];
   int execfileBurstTime[10];
 	int	execfileNum;
-  int totalWaiting = 0;
+  int totalWaiting;
 };
 
 #endif //USERKERNEL_H
