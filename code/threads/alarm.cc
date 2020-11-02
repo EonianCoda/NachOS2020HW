@@ -53,31 +53,32 @@ Alarm::CallBack()
     MachineStatus status = interrupt->getStatus();
 
     #ifdef USER_PROGRAM
+   
+    Thread* tmp = kernel->currentThread;
+    tmp->remainingTime = tmp->getBurstTime() - (tmp->totalBurst + kernel->stats->userTicks - tmp->startTime);
     if(kernel->scheduler->getSchedulerType() == SRTF)
     {
-        Thread* tmp = kernel->currentThread;
-        tmp->remainingTime = tmp->getBurstTime() - (tmp->totalBurst + kernel->stats->userTicks - tmp->startTime);
-        
-        bool change = false;
-        for(int i = 0; i < kernel->getexecfileNum(); i++)
-        {
-            if(kernel->execfileArrivalTime[i] != 0)
-            {
-                kernel->execfileArrivalTime[i] --;
-                if(kernel->execfileArrivalTime[i] == 0)
-                {
-                    kernel->getThread(i)->Fork((VoidFunctionPtr) &ForkExecute, (void *)kernel->getThread(i));
-                    cout << "Thread " << kernel->getExecfile(i) << " is executing." << endl;
-                    change = true;
-                }
-            }
-        }
-        if(change == true && kernel->scheduler->peekFront()->remainingTime < tmp->remainingTime)
-        {
+        cout << tmp->remainingTime << endl;
+    }
+    bool change = false;
+    for(int i = 1; i <= kernel->getexecfileNum(); i++)
+    {
+	if(kernel->execfileArrivalTime[i] != 0)
+	{
+		kernel->execfileArrivalTime[i] --;
+		if(kernel->execfileArrivalTime[i] == 0)
+		{
+		    kernel->getThread(i)->Fork((VoidFunctionPtr) &ForkExecute, (void *)kernel->getThread(i));
+		    cout << "Thread " << kernel->getExecfile(i) << " is executing." << endl;
+		    change = true;
+		}
+	}
+    }
+
+    if(change && kernel->scheduler->getSchedulerType() == SRTF && kernel->scheduler->peekFront()->remainingTime < tmp->remainingTime)
+    {
             interrupt->YieldOnReturn();
             return;
-        }
-       
     }
     #endif
     

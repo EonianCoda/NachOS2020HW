@@ -60,7 +60,7 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 			execfileArrivalTime[execfileNum] = atoi(argv[++i]);
 		}
     }
-	progNum = execfileNum;
+	progNum = execfileNum + 1;
 }
 
 //----------------------------------------------------------------------

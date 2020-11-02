@@ -17,21 +17,15 @@
 //	for the initialization (see also comments in main.cc)  
 //----------------------------------------------------------------------
 
-void UserProgKernel::getexecfileNum(){
-	return execfileNum;
-}
-void UserProgKernel::tellName(){
-	cout << "my name is userKernel" << endl;
-}
-
 
 UserProgKernel::UserProgKernel(int argc, char **argv) 
 		: ThreadedKernel(argc, argv)
 {
     debugUserProg = FALSE;
-	execfileNum=0;
+	execfileNum = 0;
 	memset(execfilePriority, 0, 10);
 	memset(execfileBurstTime, 0, 10);
+	memset(execfileArrivalTime, 0, 10);
     for (int i = 1; i < argc; i++) {
 		if (strcmp(argv[i], "-s") == 0) {
 			debugUserProg = TRUE;
@@ -61,8 +55,12 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 		{
 			execfileBurstTime[execfileNum] = atoi(argv[++i]);
 		}
-
+		else if(strcmp(argv[i], "-arrive") == 0)
+		{
+			execfileArrivalTime[execfileNum] = atoi(argv[++i]);
+		}
     }
+	progNum = execfileNum + 1;
 }
 
 //----------------------------------------------------------------------
@@ -112,16 +110,23 @@ UserProgKernel::Run()
 {
 	cout << "Total threads number is " << execfileNum << endl;
 	for (int n=1;n<=execfileNum;n++)
-		{
+	{
 		t[n] = new Thread(execfile[n]);
 		t[n]->space = new AddrSpace();
 		t[n]->setPriority(execfilePriority[n]);
 		t[n]->setBurstTime(execfileBurstTime[n]);
+		t[n]->remainingTime = execfileBurstTime[n];
 		DEBUG(dbscheduler, execfile[n]);
-		DEBUG(dbscheduler, execfilePriority[n]);		
-		t[n]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[n]);
-		cout << "Thread " << execfile[n] << " is executing." << endl;
-		}
+		DEBUG(dbscheduler, execfilePriority[n]);
+		
+		t[n]->arrivalTime = kernel->stats->userTicks;
+		t[n]->callbackArrivalTime = execfileArrivalTime[n];
+		if(execfileArrivalTime[n] == 0)
+		{
+			t[n]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[n]);
+			cout << "Thread " << execfile[n] << " is executing." << endl;
+		}		
+	}
 //	Thread *t1 = new Thread(execfile[1]);
 //	Thread *t1 = new Thread("../test/test1");
 //	Thread *t2 = new Thread("../test/test2");
