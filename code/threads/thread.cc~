@@ -178,7 +178,7 @@ Thread::Finish ()
 
     #ifdef USER_PROGRAM
     kernel->progNum --;
-    cout << "Thread "<< name << " BurstTime:" << 
+    out << "Thread "<< name << " BurstTime:" << 
     (kernel->stats->userTicks - this->startTime) + this->totalBurst << endl;
     if (strcmp(name, "main") != 0){
         kernel->addTotalWaiting(totalWaiting + startTime - arrivalTime);

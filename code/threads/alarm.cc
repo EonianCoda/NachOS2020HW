@@ -66,8 +66,8 @@ Alarm::CallBack()
                 kernel->execfileArrivalTime[i] --;
                 if(kernel->execfileArrivalTime[i] == 0)
                 {
-                    kernel->getThread(i)->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[n]);
-                    cout << "Thread " << execfile[n] << " is executing." << endl;
+                    kernel->getThread(i)->Fork((VoidFunctionPtr) &ForkExecute, (void *)kernel->getThread(i));
+                    cout << "Thread " << kernel->getExecfile(i) << " is executing." << endl;
                     change = true;
                 }
             }

@@ -16,6 +16,9 @@
 #include "filesys.h"
 #include "machine.h"
 #include "synchdisk.h"
+
+void ForkExecute(Thread *t);
+
 class SynchDisk;
 class UserProgKernel : public ThreadedKernel {
   public:
