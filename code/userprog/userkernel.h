@@ -30,7 +30,15 @@ class UserProgKernel : public ThreadedKernel {
     int getTotalWaiting() {return totalWaiting; }
     void addTotalWaiting(int num) {totalWaiting += num; }
     void SelfTest();		// test whether kernel is working
-    
+    char *getExecfile(int n) 
+    {
+       if (n < 10) return execfile[n];
+      else return NULL;
+    }
+    Thread* getThread(int n){
+      if (n < 10) return t[n];
+      else return NULL;
+    }
 
 // These are public for notational convenience.
     Machine *machine;
@@ -39,6 +47,8 @@ class UserProgKernel : public ThreadedKernel {
 #ifdef FILESYS
     SynchDisk *synchDisk;
 #endif // FILESYS
+  int execfileArrivalTime[10];
+  int progNum;
 
   private:
     bool debugUserProg;		// single step user program
@@ -46,8 +56,11 @@ class UserProgKernel : public ThreadedKernel {
 	char*	execfile[10];
   int execfilePriority[10];
   int execfileBurstTime[10];
+  
 	int	execfileNum;
-  int totalWaiting = 0;
+  int totalWaiting;
+  
+
 };
 
 #endif //USERKERNEL_H

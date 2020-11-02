@@ -21,7 +21,8 @@ enum SchedulerType {
         RR,     // Round Robin
         SJF,
         Priority,
-	FIFO
+	FIFO,
+	SRTF
 };
 
 class Scheduler {
@@ -44,7 +45,7 @@ class Scheduler {
 	SchedulerType getSchedulerType() {return schedulerType;}
 
     // SelfTest for scheduler is implemented in class Thread
-    
+    Thread* peekFront() {return readyList->front();}
   private:
 	SchedulerType schedulerType;
 	List<Thread *> *readyList;	// queue of threads that are ready to run,

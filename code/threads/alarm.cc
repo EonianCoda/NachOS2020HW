@@ -50,15 +50,46 @@ void
 Alarm::CallBack() 
 {
     Interrupt *interrupt = kernel->interrupt;
-    MachineStatus status = interrupt->getStatus(); 
-    kernel->currentThread->setPriority(kernel->currentThread->getPriority() - 1);
+    MachineStatus status = interrupt->getStatus();
+
+    #ifdef USER_PROGRAM
+    if(kernel->scheduler->getSchedulerType() == SRTF)
+    {
+        Thread* tmp = kernel->currentThread;
+        tmp->remainingTime = tmp->getBurstTime() - (tmp->totalBurst + kernel->stats->userTicks - tmp->startTime);
+        
+        bool change = false;
+        for(int i = 0; i < kernel->getexecfileNum(); i++)
+        {
+            if(kernel->execfileArrivalTime[i] != 0)
+            {
+                kernel->execfileArrivalTime[i] --;
+                if(kernel->execfileArrivalTime[i] == 0)
+                {
+                    kernel->getThread(i)->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[n]);
+                    cout << "Thread " << execfile[n] << " is executing." << endl;
+                    change = true;
+                }
+            }
+        }
+        if(change == true && kernel->scheduler->peekFront()->remainingTime < tmp->remainingTime)
+        {
+            interrupt->YieldOnReturn();
+            return;
+        }
+       
+    }
+    #endif
+    
+
     if (status == IdleMode) {	// is it time to quit?
         if (!interrupt->AnyFutureInterrupts()) {
-            timer->Disable();	// turn off the timer
-            //output average waiting time
             #ifdef USER_PROGRAM
+            if(kernel->progNum != 0) return; //some threads not arrive
             cout << "Average Waiting Time: " << (float)kernel->getTotalWaiting() / kernel->getexecfileNum() << endl;
             #endif
+            timer->Disable();	// turn off the timer
+            //output average waiting time
         }
     } 
     else {// there's someone to preempt

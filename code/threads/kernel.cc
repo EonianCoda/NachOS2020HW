@@ -29,23 +29,33 @@ ThreadedKernel::ThreadedKernel(int argc, char **argv)
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-rs") == 0) {
- 	    ASSERT(i + 1 < argc);
-	    RandomInit(atoi(argv[i + 1]));// initialize pseudo-random
-					// number generator
-	    randomSlice = TRUE;
-	    i++;
-        } else if (strcmp(argv[i], "-u") == 0) {
+            ASSERT(i + 1 < argc);
+            RandomInit(atoi(argv[i + 1]));// initialize pseudo-random
+                        // number generator
+            randomSlice = TRUE;
+            i++;
+        }
+        else if (strcmp(argv[i], "-u") == 0) {
             cout << "Partial usage: nachos [-rs randomSeed]\n";
-	} else if(strcmp(argv[i], "RR") == 0) {
+	    }   
+        else if(strcmp(argv[i], "RR") == 0) {
             type = RR;
-        } else if (strcmp(argv[i], "FCFS") == 0) {
-            
-		type = FIFO;
-        } else if (strcmp(argv[i], "PRIORITY") == 0) {
-	    DEBUG(dbscheduler,"use priority");
+        } 
+        else if (strcmp(argv[i], "FCFS") == 0) {
+		    type = FIFO;
+        } 
+        else if (strcmp(argv[i], "PRIORITY") == 0) {
+	        DEBUG(dbscheduler,"use priority");
             type = Priority;
-        } else if (strcmp(argv[i], "SJF") == 0) {
+        } 
+        else if (strcmp(argv[i], "SJF") == 0) {
             type = SJF;
+        }
+        else if (strcmp(argv[i], "SJF") == 0) {
+            type = SJF;
+        }
+        else if (strcmp(argv[i], "SRTF") == 0) {
+            type = SRTF;
         }
     }
 }

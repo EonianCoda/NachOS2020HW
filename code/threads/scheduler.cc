@@ -6,7 +6,7 @@
 //	If interrupts are disabled, we can assume mutual exclusion
 //	(since we are on a uniprocessor).
 //
-/// 	NOTE: We can't use Locks to provide mutual exclusion here, since
+// 	NOTE: We can't use Locks to provide mutual exclusion here, since
 // 	if we needed to wait for a lock, and the lock was busy, we would 
 //	end up calling FindNextToRun(), and that would put us in an 
 //	infinite loop.
@@ -36,6 +36,11 @@ int SJFCompare(Thread *a, Thread *b) {
         return 0;
     return a->getBurstTime() > b->getBurstTime() ? 1 : -1;
 }
+int SRTFCompare(Thread *a, Thread *b) {
+    if(a->remainingTime == b->remainingTime)
+        return 0;
+    return a->remainingTime > b->remainingTime ? 1 : -1;
+}
 
 //----------------------------------------------------------------------
 // Scheduler::Scheduler
@@ -64,6 +69,8 @@ Scheduler::Scheduler(SchedulerType type)
     	case FIFO:
 		    readyList = new List<Thread *>;
 		    break;
+        case SRTF:
+            readyList = new SortedList<Thread *>(SRTFCompare);
    	}
 	toBeDestroyed = NULL;
 } 
@@ -145,12 +152,6 @@ Scheduler::Run (Thread *nextThread, bool finishing)
 
     if (finishing) {	// mark that we need to delete current thread
         ASSERT(toBeDestroyed == NULL);
-        #ifdef USER_PROGRAM
-        if (strcmp(oldThread->getName(), "main") != 0){
-	    cout << "addwaiting time" << endl;
-            kernel->addTotalWaiting(oldThread->totalWaiting + oldThread->startTime - oldThread->arrivalTime);
-        }
-	#endif
         toBeDestroyed = oldThread;
     }
     

@@ -98,8 +98,7 @@ class SortedList : public List<T> {
 
     void SanityCheck() const;	// has this list been corrupted?
     void SelfTest(T *p, int numEntries);
-				// verify module is working
-
+				// verify module is working 
   private:
     int (*compare)(T x, T y);	// function for sorting list elements
 

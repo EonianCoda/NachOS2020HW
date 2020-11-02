@@ -111,10 +111,12 @@ class Thread {
     void Print() { cout << name; }
     void SelfTest();		// test whether thread impl is working
 
-    int arrivalTime;
-    int startTime;
-    int totalBurst;
-    int totalWaiting;
+    int arrivalTime = 0;
+    int startTime = 0;
+    int totalBurst = 0;
+    int totalWaiting = 0;
+    int callbackArrivalTime = 0;
+    int remainingTime = 0;
   private:
     // some of the private data for this class is listed above
     

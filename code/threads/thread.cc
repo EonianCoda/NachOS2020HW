@@ -39,12 +39,7 @@ Thread::Thread(char* threadName)
     stackTop = NULL;
     stack = NULL;
     status = JUST_CREATED;
-    burstTime = 0;
-    priority = 0;
-    arrivalTime = 0;
-    startTime = 0;
-    totalBurst = 0;
-    totalWaiting = 0;
+
     for (int i = 0; i < MachineStateSize; i++) {
 	machineState[i] = NULL;		// not strictly necessary, since
 					// new thread ignores contents 
@@ -181,13 +176,15 @@ Thread::Finish ()
 {
     (void) kernel->interrupt->SetLevel(IntOff);		
     ASSERT(this == kernel->currentThread);
-    
-    cout << "Thread "<< name << " BurstTime:" << 
-    (kernel->stats->userTicks - this->startTime) + this->totalBurst << endl;
+
     #ifdef USER_PROGRAM
+    kernel->progNum --;
+    out << "Thread "<< name << " BurstTime:" << 
+    (kernel->stats->userTicks - this->startTime) + this->totalBurst << endl;
     if (strcmp(name, "main") != 0){
         kernel->addTotalWaiting(totalWaiting + startTime - arrivalTime);
     }
+    
     #endif
 
     DEBUG(dbgThread, "Finishing thread: " << name);
