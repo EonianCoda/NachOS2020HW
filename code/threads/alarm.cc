@@ -66,6 +66,7 @@ Alarm::CallBack()
 		if(kernel->execfileArrivalTime[i] == 0)
 		{
 		    Thread * tmp = kernel->getThread(i);
+		    tmp->arrivalTime = kernel->stats->userTicks;
 		    tmp->Fork((VoidFunctionPtr) &ForkExecute, (void *)tmp);
 		    cout << "Thread " << kernel->getExecfile(i) << " arrive" << ", its estimated burst time = " << tmp->getBurstTime() << endl;
 		    if(kernel->scheduler->getSchedulerType() == SRTF)

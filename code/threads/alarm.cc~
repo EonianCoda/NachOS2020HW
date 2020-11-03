@@ -67,7 +67,7 @@ Alarm::CallBack()
 		{
 		    Thread * tmp = kernel->getThread(i);
 		    tmp->Fork((VoidFunctionPtr) &ForkExecute, (void *)tmp);
-		    cout << "Thread " << kernel->getExecfile(i) << " arrive" << ", its estimated burst time = " << tmp->getBurstTime << endl;
+		    cout << "Thread " << kernel->getExecfile(i) << " arrive" << ", its estimated burst time = " << tmp->getBurstTime() << endl;
 		    if(kernel->scheduler->getSchedulerType() == SRTF)
     		    {
         		cout << "Current Thread RemainingTime = " << curr->remainingTime << endl;
