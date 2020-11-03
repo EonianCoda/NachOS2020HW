@@ -54,9 +54,9 @@ Alarm::CallBack()
 
     #ifdef USER_PROGRAM
    
-    Thread* tmp = kernel->currentThread;
-    tmp->remainingTime = tmp->getBurstTime() - (tmp->totalBurst + kernel->stats->userTicks - tmp->startTime);
-
+    Thread* curr = kernel->currentThread;
+    curr->remainingTime = curr->getBurstTime() - (curr->totalBurst + kernel->stats->userTicks - curr->startTime);
+   
     bool change = false;
     for(int i = 1; i <= kernel->getexecfileNum(); i++)
     {
@@ -65,14 +65,18 @@ Alarm::CallBack()
 		kernel->execfileArrivalTime[i] --;
 		if(kernel->execfileArrivalTime[i] == 0)
 		{
-		    kernel->getThread(i)->Fork((VoidFunctionPtr) &ForkExecute, (void *)kernel->getThread(i));
-		    cout << "Thread " << kernel->getExecfile(i) << " is executing." << endl;
+		    Thread * tmp = kernel->getThread(i);
+		    tmp->Fork((VoidFunctionPtr) &ForkExecute, (void *)tmp);
+		    cout << "Thread " << kernel->getExecfile(i) << " arrive" << ", its estimated burst time = " << tmp->getBurstTime << endl;
+		    if(kernel->scheduler->getSchedulerType() == SRTF)
+    		    {
+        		cout << "Current Thread RemainingTime = " << curr->remainingTime << endl;
+    	            }
 		    change = true;
 		}
 	}
     }
-
-    if(change && kernel->scheduler->getSchedulerType() == SRTF && kernel->scheduler->peekFront()->remainingTime < tmp->remainingTime)
+    if(change && kernel->scheduler->getSchedulerType() == SRTF && kernel->scheduler->peekFront()->remainingTime < curr->remainingTime)
     {
             interrupt->YieldOnReturn();
             return;
