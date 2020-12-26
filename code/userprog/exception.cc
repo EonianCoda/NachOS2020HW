@@ -86,6 +86,7 @@ ExceptionHandler(ExceptionType which)
 			}
 			break;
 		case PageFaultException:
+		{
 			cout << "page fault" << endl;
 
 			//count virtual page number
@@ -110,18 +111,18 @@ ExceptionHandler(ExceptionType which)
 				AddrSpace::usedPhyPage[j] = true;
 				AddrSpace::usedVirPage[missingPage->virtualMemPage] = false;
 				//load missing page in main memory
-				bcopy(buf, &kernel->machine->mainMemory[j * pageSize], pageSize);
+				bcopy(buf, &kernel->machine->mainMemory[j * PageSize], PageSize);
 			}
 			//Physical memory isn't enough, page replacement occur
 			else
 			{
 				char *buf2 = new char[PageSize];
-				if(kernel::pra == pageReplacementAlgor::FIFO)
+				if(kernel->pra == pageReplacementAlgor::FIFO)
 				{
 					cout << "FIFO Swapping" << endl;
 					
 				}
-				else if(kernel::pra == pageReplacementAlgor::LRU)
+				else if(kernel->pra == pageReplacementAlgor::LRU)
 				{
 					cout << "LRU Swapping" << endl;
 				}
@@ -137,11 +138,11 @@ ExceptionHandler(ExceptionType which)
 				victim->valid = false;
 
 				//read victim's data and write in virtual memory
-				bcopy(&kernel->machine->mainMemory[phyPageVic * pageSize] , buf2, pageSize);
+				bcopy(&kernel->machine->mainMemory[phyPageVic * PageSize] , buf2, PageSize);
 				kernel->virtualMemory->WriteSector(missingPage->virtualMemPage, buf2);
 
 				//load missing page in main memory
-				bcopy(buf, &kernel->machine->mainMemory[phyPageVic * pageSize], pageSize);
+				bcopy(buf, &kernel->machine->mainMemory[phyPageVic * PageSize], PageSize);
 
 				cout << "number of " << phyPageVic << " page swap out" << endl;
 				delete buf2;
@@ -149,6 +150,8 @@ ExceptionHandler(ExceptionType which)
 			cout << "page replacement finished" << endl;
 
 			delete buf;
+		}
+			
 			break;
 		default:
 			cerr << "Unexpected user mode exception" << which << "\n";
