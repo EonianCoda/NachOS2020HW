@@ -223,8 +223,14 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 			return PageFaultException;
 		}
 		entry = &pageTable[vpn];
+
+		//if page replacement algorithm is LRU, then when translate this page, record it.
+		if(kernel->pra == pageReplacementAlgor::LRU)
+		{
+			AddrSpace::orderOfPages.Remove(entry->physicalPage);
+			AddrSpace::orderOfPages.Append(entry->physicalPage);
+		}
     } 
-	bcopy()
     else 
     {
 		for (entry = NULL, i = 0; i < TLBSize; i++)

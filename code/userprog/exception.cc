@@ -107,7 +107,6 @@ ExceptionHandler(ExceptionType which)
 			{
 				missingPage->physicalPage = j;
 				missingPage->valid = true;
-				
 				AddrSpace::usedPhyPage[j] = true;
 				AddrSpace::usedVirPage[missingPage->virtualMemPage] = false;
 				//load missing page in main memory
@@ -120,31 +119,31 @@ ExceptionHandler(ExceptionType which)
 				if(kernel::pra == pageReplacementAlgor::FIFO)
 				{
 					cout << "FIFO Swapping" << endl;
-					unsigned int phyPageVic = AddrSpace::orderOfPages.RemoveFront(); // find the earliest used page
-					TranslationEntry *victim = AddrSpace::invertedTable[phyPageVic]; //find the victim
-					AddrSpace::invertedTable[phyPageVic] = missingPage; 
-					AddrSpace::orderOfPages.Append(phyPageVic);
-
-					missingPage->physicalPage = phyPageVic;
-					missingPage->valid = true;
-
-					victim->virtualMemPage = missingPage->virtualMemPage;
-					victim->valid = false;
-
-					//read victim's data and write in virtual memory
-					bcopy(&machine->mainMemory[phyPageVic * pageSize] , buf2, pageSize);
-					kernel->virtualMemory->WriteSector(missingPage->virtualMemPage, buf2);
-
-					//load missing page in main memory
-					bcopy(buf, &machine->mainMemory[phyPageVic * pageSize], pageSize);
-
-					cout << "number of " << phyPageVic << " page swap out" << endl;
 					
 				}
 				else if(kernel::pra == pageReplacementAlgor::LRU)
 				{
 					cout << "LRU Swapping" << endl;
 				}
+				unsigned int phyPageVic = AddrSpace::orderOfPages.RemoveFront(); // find the earliest used page
+				TranslationEntry *victim = AddrSpace::invertedTable[phyPageVic]; //find the victim
+				AddrSpace::invertedTable[phyPageVic] = missingPage; 
+				AddrSpace::orderOfPages.Append(phyPageVic);
+
+				missingPage->physicalPage = phyPageVic;
+				missingPage->valid = true;
+
+				victim->virtualMemPage = missingPage->virtualMemPage;
+				victim->valid = false;
+
+				//read victim's data and write in virtual memory
+				bcopy(&machine->mainMemory[phyPageVic * pageSize] , buf2, pageSize);
+				kernel->virtualMemory->WriteSector(missingPage->virtualMemPage, buf2);
+
+				//load missing page in main memory
+				bcopy(buf, &machine->mainMemory[phyPageVic * pageSize], pageSize);
+
+				cout << "number of " << phyPageVic << " page swap out" << endl;
 				delete buf2;
 			}
 			cout << "page replacement finished" << endl;
