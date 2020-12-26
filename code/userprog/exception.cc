@@ -117,12 +117,12 @@ ExceptionHandler(ExceptionType which)
 			else
 			{
 				char *buf2 = new char[PageSize];
-				if(kernel->pra == pageReplacementAlgor::FIFO)
+				if(kernel->pra == FIFO)
 				{
 					cout << "FIFO Swapping" << endl;
 					
 				}
-				else if(kernel->pra == pageReplacementAlgor::LRU)
+				else if(kernel->pra == LRU)
 				{
 					cout << "LRU Swapping" << endl;
 				}
