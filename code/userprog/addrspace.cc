@@ -194,8 +194,8 @@ AddrSpace::Load(char *fileName)
             //use physical memory
             if(pageTable[i].valid)
             {
-                executable->ReadAt(&(kernel->machine->mainMemory[ pageTable[i].physicalPage * PageSize],
-                                    PageSize,noffH.code.inFileAddr+(i * PageSize)));
+                executable->ReadAt( &(kernel->machine->mainMemory[ pageTable[i].physicalPage * PageSize]),
+                                    PageSize,noffH.code.inFileAddr+(i * PageSize));
             }
             //use virtual memory
             else
