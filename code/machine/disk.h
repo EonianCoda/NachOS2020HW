@@ -53,7 +53,7 @@ const int NumTracks = 32;		// number of tracks per disk
 const int NumSectors = (SectorsPerTrack * NumTracks);
 					// total # of sectors per disk
 
-class Disk : public CallBackObj {
+class  Disk : public CallBackObj {
   public:
     Disk(char* name, CallBackObj *toCall); // Create a simulated disk.  
 					// Invoke toCall->CallBack() 

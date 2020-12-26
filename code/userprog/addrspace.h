@@ -25,6 +25,8 @@ class AddrSpace {
     ~AddrSpace();			// De-allocate an address space
 
     static bool usedPhyPage[NumPhysPages];
+    static bool usedVirPage[NumPhysPages];
+
 
     void Execute(char *fileName);	// Run the the program
 					// stored in the file "executable"
@@ -43,7 +45,7 @@ class AddrSpace {
 
     void InitRegisters();		// Initialize user-level CPU registers,
 					// before jumping to user code
-
+    bool loaded = false;
 };
 
 #endif // ADDRSPACE_H

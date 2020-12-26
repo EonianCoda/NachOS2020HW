@@ -30,6 +30,7 @@
 
 
 bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
+bool AddrSpace::usedVirPage[NumPhysPages] = {0};
 
 static void 
 SwapHeader (NoffHeader *noffH)
@@ -58,19 +59,20 @@ SwapHeader (NoffHeader *noffH)
 AddrSpace::AddrSpace()
 {
     pageTable = new TranslationEntry[NumPhysPages];
-    for (unsigned int i = 0; i < NumPhysPages; i++) {
-	pageTable[i].virtualPage = i;	// for now, virt page # = phys page #
-	pageTable[i].physicalPage = i;
-//	pageTable[i].physicalPage = 0;
-	pageTable[i].valid = TRUE;
-//	pageTable[i].valid = FALSE;
-	pageTable[i].use = FALSE;
-	pageTable[i].dirty = FALSE;
-	pageTable[i].readOnly = FALSE;  
-    }
-    
+
+//     for (unsigned int i = 0; i < NumPhysPages; i++) 
+//     {
+// 	pageTable[i].virtualPage = i;	// for now, virt page # = phys page #
+// 	pageTable[i].physicalPage = i;
+// //	pageTable[i].physicalPage = 0;
+// 	pageTable[i].valid = TRUE;
+// //	pageTable[i].valid = FALSE;
+// 	pageTable[i].use = FALSE;
+// 	pageTable[i].dirty = FALSE;
+// 	pageTable[i].readOnly = FALSE;  
+//     }
     // zero out the entire address space
-//    bzero(kernel->machine->mainMemory, MemorySize);
+    //bzero(kernel->machine->mainMemory, MemorySize);
 }
 
 //----------------------------------------------------------------------
@@ -81,7 +83,12 @@ AddrSpace::AddrSpace()
 AddrSpace::~AddrSpace()
 {
    for(int i = 0; i < numPages; i++)
-        AddrSpace::usedPhyPage[pageTable[i].physicalPage] = false;
+   {
+
+       AddrSpace::usedPhyPage[pageTable[i].physicalPage] = false;
+       AddrSpace::usedVirPage[pageTable[i].physicalPage] = false;
+   }
+        
    delete pageTable;
 }
 
@@ -122,10 +129,16 @@ AddrSpace::Load(char *fileName)
     size = numPages * PageSize;
 
     numPages = divRoundUp(size,PageSize);
-    for(unsigned int i=0, j=0; i<numPages; i++){
+
+    
+    unsigned int i = 0;
+    //use physical memory
+    for(unsigned int j=0; i<numPages; i++){
+        while(j < NumPhysPages && AddrSpace::usedPhyPage[j] == true) j++;
+        // check if physical memory lack
+        if(j == NumPhysPages) break;
+
         pageTable[i].virtualPage = i;
-        while(j<NumPhysPages && AddrSpace::usedPhyPage[j] == true)
-            j++;
         AddrSpace::usedPhyPage[j] = true;
         pageTable[i].physicalPage = j;
         pageTable[i].valid = true;
@@ -133,30 +146,61 @@ AddrSpace::Load(char *fileName)
         pageTable[i].dirty = false;
         pageTable[i].readOnly = false;
     }
+    //use virtual memory, when physical memory isn't enough
+    for(unsigned int j=0; i < numPages; i++){
+        while(j < NumPhysPages && AddrSpace::usedVirPage[j] == true) j++;
+        // check if physical memory lack
+        if(j == NumPhysPages) break;
+
+        pageTable[i].virtualPage = i;
+        pageTable[i].virtualMemPage = j;
+        AddrSpace::usedVirPage[j] = true;
+        pageTable[i].valid = false; //not load in main memory
+        pageTable[i].use = false;
+        pageTable[i].dirty = false;
+        pageTable[i].readOnly = false;
+    }
+    
 
     size = numPages * PageSize;
 
-    ASSERT(numPages <= NumPhysPages);		// check we're not trying
-						// to run anything too big --
-						// at least until we have
-						// virtual memory
+    // ASSERT(numPages <= NumPhysPages);		// check we're not trying
+	// 					// to run anything too big --
+	// 					// at least until we have
+	// 					// virtual memory
 
     DEBUG(dbgAddr, "Initializing address space: " << numPages << ", " << size);
 
 // then, copy in the code and data segments into memory
 	if (noffH.code.size > 0) {
-        DEBUG(dbgAddr, "Initializing code segment.");
-	DEBUG(dbgAddr, noffH.code.virtualAddr << ", " << noffH.code.size);
-        	executable->ReadAt(
-		&(kernel->machine->mainMemory[pageTable[noffH.code.virtualAddr/PageSize].physicalPage * PageSize + (noffH.code.virtualAddr%PageSize)]), 
-			noffH.code.size, noffH.code.inFileAddr);
+        // DEBUG(dbgAddr, "Initializing code segment.");
+	    // DEBUG(dbgAddr, noffH.code.virtualAddr << ", " << noffH.code.size);
+        char *buf = new char[PageSize];
+        for(unsigned int i = 0; i < numPages; i++)
+        {
+           
+            //use physical memory
+            if(pageTable[i].valid)
+            {
+                executable->ReadAt(&(kernel->machine->mainMemory[ pageTable[i].physicalPage * PageSize],
+                                    PageSize,noffH.code.inFileAddr+(i * PageSize)));
+            }
+            //use virtual memory
+            else
+            {
+                executable->ReadAt(buf, PageSize, noffH.code.inFileAddr+(i * PageSize));
+                kernel->virtualMemory->WriteSector(pageTable[i].virtualMemPage, buf);
+            }
+            
+        }
     }
-	if (noffH.initData.size > 0) {
-        DEBUG(dbgAddr, "Initializing data segment.");
-	DEBUG(dbgAddr, noffH.initData.virtualAddr << ", " << noffH.initData.size);
-        executable->ReadAt(
-		&(kernel->machine->mainMemory[pageTable[noffH.initData.virtualAddr/PageSize].physicalPage * PageSize + (noffH.code.virtualAddr%PageSize)]),
-			noffH.initData.size, noffH.initData.inFileAddr);
+
+	if (noffH.initData.size > 0) 
+    {
+        // DEBUG(dbgAddr, "Initializing data segment.");
+	    // DEBUG(dbgAddr, noffH.initData.virtualAddr << ", " << noffH.initData.size);
+        executable->ReadAt(&(kernel->machine->mainMemory[noffH.initData.virtualAddr]),
+                            noffH.initData.size, noffH.initData.inFileAddr);
     }
 
     delete executable;			// close file
@@ -174,6 +218,7 @@ AddrSpace::Load(char *fileName)
 void 
 AddrSpace::Execute(char *fileName) 
 {
+    loaded = false;
     if (!Load(fileName)) {
 	cout << "inside !Load(FileName)" << endl;
 	return;				// executable not found
@@ -182,7 +227,7 @@ AddrSpace::Execute(char *fileName)
     //kernel->currentThread->space = this;
     this->InitRegisters();		// set the initial register values
     this->RestoreState();		// load page table register
-
+    loaded = true;
     kernel->machine->Run();		// jump to the user progam
 
     ASSERTNOTREACHED();			// machine->Run never returns;
@@ -234,8 +279,11 @@ AddrSpace::InitRegisters()
 
 void AddrSpace::SaveState() 
 {
+    if(loaded)
+    {
         pageTable=kernel->machine->pageTable;
         numPages=kernel->machine->pageTableSize;
+    }
 }
 
 //----------------------------------------------------------------------

@@ -224,6 +224,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 		}
 		entry = &pageTable[vpn];
     } 
+	bcopy()
     else 
     {
 		for (entry = NULL, i = 0; i < TLBSize; i++)

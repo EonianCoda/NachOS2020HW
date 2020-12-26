@@ -132,6 +132,9 @@ class Machine {
     TranslationEntry *pageTable;
     unsigned int pageTableSize;
     bool ReadMem(int addr, int size, int* value);
+
+
+	
   private:
 
 // Routines internal to the machine simulation -- DO NOT call these directly
