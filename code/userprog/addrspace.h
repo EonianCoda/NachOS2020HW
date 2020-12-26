@@ -16,8 +16,11 @@
 #include "copyright.h"
 #include "filesys.h"
 #include <string.h>
+#include "list.h"
 
 #define UserStackSize		1024 	// increase this as necessary!
+
+
 
 class AddrSpace {
   public:
@@ -26,6 +29,8 @@ class AddrSpace {
 
     static bool usedPhyPage[NumPhysPages];
     static bool usedVirPage[NumPhysPages];
+    static TranslationEntry *invertedTable[NumPhysPages];
+    static List<unsigned int> orderOfPages;
 
 
     void Execute(char *fileName);	// Run the the program

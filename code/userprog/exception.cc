@@ -86,7 +86,64 @@ ExceptionHandler(ExceptionType which)
 			}
 			break;
 		case PageFaultException:
-			/*    Page Fault Exception    */
+			cout << "page fault" << endl;
+
+			//count virtual page number
+			unsigned int vpn = (unsigned)machine->ReadRegister(PCReg)/ PageSize;
+			//get the missing page
+			TranslationEntry *missingPage = machine->pageTable[vpn];
+
+			//find empty physical memory page
+			int j = 0;
+			while(j < NumPhysPages && AddrSpace::usedPhyPage[j] == true) j++;
+
+			//read page from virtual memory
+			char *buf = new char[PageSize];
+			kernel->virtualMemory->ReadSector(missingPage->virtualMemPage, buf);
+
+
+			//Physical memory is enough, swap page in main memory
+			if(j != 32)
+			{
+				missingPage->physicalPage = j;
+				missingPage->valid = true;
+				
+				AddrSpace::usedPhyPage[j] = true;
+				AddrSpace::usedVirPage[missingPage->virtualMemPage] = false;
+				//load missing page in main memory
+				bcopy(buf, &machine->mainMemory[j * pageSize], pageSize);
+			}
+			//Physical memory isn't enough, page replacement occur
+			else
+			{
+				char *buf2 = new char[PageSize];
+				if(kernel::pra == pageReplacementAlgor::FIFO)
+				{
+					unsigned int phyPageVic = AddrSpace::orderOfPages.RemoveFront(); // find the earliest used page
+					TranslationEntry *victim = AddrSpace::invertedTable[phyPageVic]; //find the victim
+					AddrSpace::invertedTable[phyPageVic] = missingPage; 
+
+
+					missingPage->physicalPage = phyPageVic;
+					missingPage->valid = true;
+
+					victim->virtualMemPage = missingPage->virtualMemPage;
+					victim->valid = false;
+
+					//read victim's data and write in virtual memory
+					bcopy(&machine->mainMemory[phyPageVic * pageSize] , buf2, pageSize);
+					kernel->virtualMemory->WriteSector(missingPage->virtualMemPage, buf2);
+
+					//load missing page in main memory
+					bcopy(buf, &machine->mainMemory[phyPageVic * pageSize], pageSize);
+				}
+				else if(kernel::pra == pageReplacementAlgor::LRU)
+				{
+
+				}
+				delete buf2;
+			}
+			delete buf;
 			break;
 		default:
 			cerr << "Unexpected user mode exception" << which << "\n";

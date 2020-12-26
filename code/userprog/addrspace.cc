@@ -31,6 +31,9 @@
 
 bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
 bool AddrSpace::usedVirPage[NumPhysPages] = {0};
+TranslationEntry *AddrSpace::invertedTable[NumPhysPages] = {NULL};
+List AddrSpace::orderOfPages;
+
 
 static void 
 SwapHeader (NoffHeader *noffH)
@@ -84,9 +87,17 @@ AddrSpace::~AddrSpace()
 {
    for(int i = 0; i < numPages; i++)
    {
-
-       AddrSpace::usedPhyPage[pageTable[i].physicalPage] = false;
-       AddrSpace::usedVirPage[pageTable[i].physicalPage] = false;
+       if(pageTable[i].valid)
+       {
+            AddrSpace::usedPhyPage[pageTable[i].physicalPage] = false;
+            AddrSpace::orderOfPages.Remove(pageTable[i].physicalPage);
+            AddrSpace::invertedTable[pageTable[i].physicalPage] = NULL;
+            pageTable[i].physicalPage
+       }
+       else
+       {
+            AddrSpace::usedVirPage[pageTable[i].virtualMemPage] = false;
+       }
    }
         
    delete pageTable;
@@ -145,6 +156,9 @@ AddrSpace::Load(char *fileName)
         pageTable[i].use = false;
         pageTable[i].dirty = false;
         pageTable[i].readOnly = false;
+
+        AddrSpace::invertedTable[j] = &pageTable[i];
+        AddrSpace::orderOfPages.Append(j);
     }
     //use virtual memory, when physical memory isn't enough
     for(unsigned int j=0; i < numPages; i++){
@@ -191,8 +205,8 @@ AddrSpace::Load(char *fileName)
                 executable->ReadAt(buf, PageSize, noffH.code.inFileAddr+(i * PageSize));
                 kernel->virtualMemory->WriteSector(pageTable[i].virtualMemPage, buf);
             }
-            
         }
+        delete buf
     }
 
 	if (noffH.initData.size > 0) 

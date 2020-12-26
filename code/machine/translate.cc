@@ -220,7 +220,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 		} 
 		else if (!pageTable[vpn].valid) 
 		{
-			/* 		Add Page fault code here		*/
+			return PageFaultException;
 		}
 		entry = &pageTable[vpn];
     } 
