@@ -152,7 +152,7 @@ ExceptionHandler(ExceptionType which)
 			delete buf;
 		}
 			
-			break;
+			return;
 		default:
 			cerr << "Unexpected user mode exception" << which << "\n";
 			break;
