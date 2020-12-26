@@ -89,9 +89,9 @@ ExceptionHandler(ExceptionType which)
 			cout << "page fault" << endl;
 
 			//count virtual page number
-			unsigned int vpn = (unsigned)machine->ReadRegister(PCReg)/ PageSize;
+			unsigned int vpn = (unsigned)kernel->machine->ReadRegister(PCReg)/ PageSize;
 			//get the missing page
-			TranslationEntry *missingPage = machine->pageTable[vpn];
+			TranslationEntry *missingPage = kernel->machine->pageTable[vpn];
 
 			//find empty physical memory page
 			int j = 0;
@@ -110,7 +110,7 @@ ExceptionHandler(ExceptionType which)
 				AddrSpace::usedPhyPage[j] = true;
 				AddrSpace::usedVirPage[missingPage->virtualMemPage] = false;
 				//load missing page in main memory
-				bcopy(buf, &machine->mainMemory[j * pageSize], pageSize);
+				bcopy(buf, &kernel->machine->mainMemory[j * pageSize], pageSize);
 			}
 			//Physical memory isn't enough, page replacement occur
 			else
@@ -137,11 +137,11 @@ ExceptionHandler(ExceptionType which)
 				victim->valid = false;
 
 				//read victim's data and write in virtual memory
-				bcopy(&machine->mainMemory[phyPageVic * pageSize] , buf2, pageSize);
+				bcopy(&kernel->machine->mainMemory[phyPageVic * pageSize] , buf2, pageSize);
 				kernel->virtualMemory->WriteSector(missingPage->virtualMemPage, buf2);
 
 				//load missing page in main memory
-				bcopy(buf, &machine->mainMemory[phyPageVic * pageSize], pageSize);
+				bcopy(buf, &kernel->machine->mainMemory[phyPageVic * pageSize], pageSize);
 
 				cout << "number of " << phyPageVic << " page swap out" << endl;
 				delete buf2;
