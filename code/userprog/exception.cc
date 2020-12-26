@@ -92,7 +92,7 @@ ExceptionHandler(ExceptionType which)
 			//count virtual page number
 			unsigned int vpn = (unsigned)kernel->machine->ReadRegister(PCReg)/ PageSize;
 			//get the missing page
-			TranslationEntry *missingPage = kernel->machine->pageTable[vpn];
+			TranslationEntry *missingPage = &kernel->machine->pageTable[vpn];
 
 			//find empty physical memory page
 			int j = 0;
