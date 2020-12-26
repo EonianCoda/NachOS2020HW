@@ -21,7 +21,7 @@ class SynchDisk;
 enum pageReplacementAlgor{
   FIFO,
   LRU,
-}
+};
 
 class UserProgKernel : public ThreadedKernel {
   public:
