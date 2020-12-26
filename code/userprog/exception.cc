@@ -123,7 +123,7 @@ ExceptionHandler(ExceptionType which)
 					unsigned int phyPageVic = AddrSpace::orderOfPages.RemoveFront(); // find the earliest used page
 					TranslationEntry *victim = AddrSpace::invertedTable[phyPageVic]; //find the victim
 					AddrSpace::invertedTable[phyPageVic] = missingPage; 
-
+					AddrSpace::orderOfPages.Append(phyPageVic);
 
 					missingPage->physicalPage = phyPageVic;
 					missingPage->valid = true;
@@ -147,6 +147,8 @@ ExceptionHandler(ExceptionType which)
 				}
 				delete buf2;
 			}
+			cout << "page replacement finished" << endl;
+
 			delete buf;
 			break;
 		default:
