@@ -45,11 +45,11 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 	}
 	else if(strcmp(argv[i], "FIFO"))
 	{
-		pra = pageReplacementAlgor::FIFO;
+		pra = FIFO;
 	}
 	else if(strcmp(argv[i], "LRU"))
 	{
-		pra = pageReplacementAlgor::LRU;
+		pra = LRU;
 	}
     }
 }
