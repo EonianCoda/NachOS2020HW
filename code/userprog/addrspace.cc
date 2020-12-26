@@ -204,7 +204,7 @@ AddrSpace::Load(char *fileName)
                 kernel->virtualMemory->WriteSector(pageTable[i].virtualMemPage, buf);
             }
         }
-        delete buf
+        delete buf;
     }
 
 	if (noffH.initData.size > 0) 
