@@ -67,6 +67,9 @@ Thread::~Thread()
 
     ASSERT(this != kernel->currentThread);
     if (stack != NULL)
+#ifdef USER_PROGRAM
+    delete space;
+#endif
 	DeallocBoundedArray((char *) stack, StackSize * sizeof(int));
 }
 
