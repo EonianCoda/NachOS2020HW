@@ -32,7 +32,7 @@
 bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
 bool AddrSpace::usedVirPage[NumPhysPages] = {0};
 TranslationEntry *AddrSpace::invertedTable[NumPhysPages] = {NULL};
-List AddrSpace::orderOfPages;
+List<unsigned int> AddrSpace::orderOfPages;
 
 
 static void 
