@@ -119,6 +119,7 @@ ExceptionHandler(ExceptionType which)
 				char *buf2 = new char[PageSize];
 				if(kernel::pra == pageReplacementAlgor::FIFO)
 				{
+					cout << "FIFO Swapping" << endl;
 					unsigned int phyPageVic = AddrSpace::orderOfPages.RemoveFront(); // find the earliest used page
 					TranslationEntry *victim = AddrSpace::invertedTable[phyPageVic]; //find the victim
 					AddrSpace::invertedTable[phyPageVic] = missingPage; 
@@ -136,10 +137,13 @@ ExceptionHandler(ExceptionType which)
 
 					//load missing page in main memory
 					bcopy(buf, &machine->mainMemory[phyPageVic * pageSize], pageSize);
+
+					cout << "number of " << phyPageVic << " page swap out" << endl;
+					
 				}
 				else if(kernel::pra == pageReplacementAlgor::LRU)
 				{
-
+					cout << "LRU Swapping" << endl;
 				}
 				delete buf2;
 			}
