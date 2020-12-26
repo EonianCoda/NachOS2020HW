@@ -231,6 +231,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 			AddrSpace::orderOfPages.Append(entry->physicalPage);
 		}
     } 
+	
     else 
     {
 		for (entry = NULL, i = 0; i < TLBSize; i++)

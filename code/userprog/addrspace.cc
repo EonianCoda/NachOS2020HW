@@ -92,14 +92,12 @@ AddrSpace::~AddrSpace()
             AddrSpace::usedPhyPage[pageTable[i].physicalPage] = false;
             AddrSpace::orderOfPages.Remove(pageTable[i].physicalPage);
             AddrSpace::invertedTable[pageTable[i].physicalPage] = NULL;
-            pageTable[i].physicalPage
        }
        else
        {
             AddrSpace::usedVirPage[pageTable[i].virtualMemPage] = false;
        }
-   }
-        
+   } 
    delete pageTable;
 }
 
