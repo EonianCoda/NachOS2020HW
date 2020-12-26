@@ -79,6 +79,12 @@ ThreadedKernel::Initialize()
 
 ThreadedKernel::~ThreadedKernel()
 {
+    if(currentThread != NULL)
+    {
+        Thread *tmp = currentThread;
+        currentThread = NULL;
+        delete tmp;
+    }
     delete alarm;
     delete scheduler;
     delete interrupt;
