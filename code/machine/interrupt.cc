@@ -233,6 +233,13 @@ Interrupt::Idle()
 void
 Interrupt::Halt()
 {
+    if(kernel->currentThread != NULL)
+    {
+        Thread *tmp = kernel->currentThread;
+        kernel->currentThread = NULL;
+        delete tmp;
+    }
+
     cout << "Machine halting!\n\n";
     kernel->stats->Print();
     delete kernel;	// Never returns.
