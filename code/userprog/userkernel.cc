@@ -43,11 +43,11 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 		cout << "	./nachos -s : Print machine status during the machine is on." << endl;
 		cout << "	./nachos -e file1 -e file2 : executing file1 and file2."  << endl;
 	}
-	else if(strcmp(argv[i], "FIFO"))
+	else if(strcmp(argv[i], "FIFO") == 0)
 	{
 		pra = FIFO;
 	}
-	else if(strcmp(argv[i], "LRU"))
+	else if(strcmp(argv[i], "LRU") == 0)
 	{
 		pra = LRU;
 	}
