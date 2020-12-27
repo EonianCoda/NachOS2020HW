@@ -667,7 +667,7 @@ timer.o: ../machine/timer.cc /usr/include/stdc-predef.h \
  ../userprog/userkernel.h ../threads/kernel.h ../threads/thread.h \
  ../lib/sysdep.h ../machine/machine.h ../machine/translate.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
- ../threads/scheduler.h ../lib/list.h ../lib/debug.h ../lib/list.cc \
+ ../lib/list.h ../lib/debug.h ../lib/list.cc ../threads/scheduler.h \
  ../machine/interrupt.h ../machine/stats.h ../threads/alarm.h \
  ../machine/callback.h ../machine/timer.h ../filesys/synchdisk.h \
  ../machine/disk.h ../threads/synch.h ../threads/main.h
@@ -762,7 +762,7 @@ alarm.o: ../threads/alarm.cc /usr/include/stdc-predef.h \
  ../userprog/userkernel.h ../threads/kernel.h ../threads/thread.h \
  ../lib/sysdep.h ../machine/machine.h ../machine/translate.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
- ../threads/scheduler.h ../lib/list.h ../lib/debug.h ../lib/list.cc \
+ ../lib/list.h ../lib/debug.h ../lib/list.cc ../threads/scheduler.h \
  ../machine/interrupt.h ../machine/stats.h ../filesys/synchdisk.h \
  ../machine/disk.h ../threads/synch.h
 kernel.o: ../threads/kernel.cc /usr/include/stdc-predef.h \
@@ -854,8 +854,8 @@ kernel.o: ../threads/kernel.cc /usr/include/stdc-predef.h \
  ../threads/main.h ../userprog/userkernel.h ../threads/kernel.h \
  ../lib/utility.h ../threads/thread.h ../lib/sysdep.h \
  ../machine/machine.h ../machine/translate.h ../userprog/addrspace.h \
- ../filesys/filesys.h ../filesys/openfile.h ../threads/scheduler.h \
- ../lib/list.h ../lib/debug.h ../lib/list.cc ../machine/interrupt.h \
+ ../filesys/filesys.h ../filesys/openfile.h ../lib/list.h ../lib/debug.h \
+ ../lib/list.cc ../threads/scheduler.h ../machine/interrupt.h \
  ../machine/callback.h ../machine/stats.h ../threads/alarm.h \
  ../machine/callback.h ../machine/timer.h ../filesys/synchdisk.h \
  ../machine/disk.h ../threads/synch.h ../threads/kernel.h \
@@ -950,11 +950,11 @@ main.o: ../threads/main.cc /usr/include/stdc-predef.h ../lib/copyright.h \
  ../userprog/userkernel.h ../threads/kernel.h ../lib/utility.h \
  ../threads/thread.h ../lib/sysdep.h ../machine/machine.h \
  ../machine/translate.h ../userprog/addrspace.h ../filesys/filesys.h \
- ../filesys/openfile.h ../threads/scheduler.h ../lib/list.h \
- ../lib/debug.h ../lib/list.cc ../machine/interrupt.h \
- ../machine/callback.h ../machine/stats.h ../threads/alarm.h \
- ../machine/callback.h ../machine/timer.h ../filesys/synchdisk.h \
- ../machine/disk.h ../threads/synch.h
+ ../filesys/openfile.h ../lib/list.h ../lib/debug.h ../lib/list.cc \
+ ../threads/scheduler.h ../machine/interrupt.h ../machine/callback.h \
+ ../machine/stats.h ../threads/alarm.h ../machine/callback.h \
+ ../machine/timer.h ../filesys/synchdisk.h ../machine/disk.h \
+ ../threads/synch.h
 scheduler.o: ../threads/scheduler.cc /usr/include/stdc-predef.h \
  ../lib/copyright.h ../lib/debug.h ../lib/copyright.h ../lib/utility.h \
  ../lib/sysdep.h /usr/include/c++/4.8/iostream \
@@ -1326,9 +1326,9 @@ thread.o: ../threads/thread.cc /usr/include/stdc-predef.h \
  /usr/include/_G_config.h /usr/include/i386-linux-gnu/bits/stdio_lim.h \
  /usr/include/i386-linux-gnu/bits/sys_errlist.h /usr/include/string.h \
  ../machine/machine.h ../machine/translate.h ../userprog/addrspace.h \
- ../filesys/filesys.h ../filesys/openfile.h ../threads/switch.h \
- ../threads/synch.h ../lib/list.h ../lib/debug.h ../lib/utility.h \
- ../lib/sysdep.h ../lib/list.cc ../threads/main.h ../lib/debug.h \
+ ../filesys/filesys.h ../filesys/openfile.h ../lib/list.h ../lib/debug.h \
+ ../lib/utility.h ../lib/sysdep.h ../lib/list.cc ../threads/switch.h \
+ ../threads/synch.h ../threads/main.h ../lib/debug.h \
  ../userprog/userkernel.h ../threads/kernel.h ../threads/scheduler.h \
  ../machine/interrupt.h ../machine/callback.h ../machine/stats.h \
  ../threads/alarm.h ../machine/callback.h ../machine/timer.h \
@@ -1611,12 +1611,12 @@ addrspace.o: ../userprog/addrspace.cc /usr/include/stdc-predef.h \
  ../userprog/userkernel.h ../threads/kernel.h ../lib/utility.h \
  ../threads/thread.h ../lib/sysdep.h ../machine/machine.h \
  ../machine/translate.h ../userprog/addrspace.h ../filesys/filesys.h \
- ../filesys/openfile.h ../threads/scheduler.h ../lib/list.h \
- ../lib/debug.h ../lib/list.cc ../machine/interrupt.h \
- ../machine/callback.h ../machine/stats.h ../threads/alarm.h \
- ../machine/callback.h ../machine/timer.h ../filesys/synchdisk.h \
- ../machine/disk.h ../threads/synch.h ../threads/main.h \
- ../userprog/addrspace.h ../bin/noff.h
+ ../filesys/openfile.h ../lib/list.h ../lib/debug.h ../lib/list.cc \
+ ../threads/scheduler.h ../machine/interrupt.h ../machine/callback.h \
+ ../machine/stats.h ../threads/alarm.h ../machine/callback.h \
+ ../machine/timer.h ../filesys/synchdisk.h ../machine/disk.h \
+ ../threads/synch.h ../threads/main.h ../userprog/addrspace.h \
+ ../bin/noff.h
 exception.o: ../userprog/exception.cc /usr/include/stdc-predef.h \
  ../lib/copyright.h ../threads/main.h ../lib/debug.h ../lib/copyright.h \
  ../lib/utility.h ../lib/sysdep.h /usr/include/c++/4.8/iostream \
@@ -1706,12 +1706,11 @@ exception.o: ../userprog/exception.cc /usr/include/stdc-predef.h \
  ../userprog/userkernel.h ../threads/kernel.h ../lib/utility.h \
  ../threads/thread.h ../lib/sysdep.h ../machine/machine.h \
  ../machine/translate.h ../userprog/addrspace.h ../filesys/filesys.h \
- ../filesys/openfile.h ../threads/scheduler.h ../lib/list.h \
- ../lib/debug.h ../lib/list.cc ../machine/interrupt.h \
- ../machine/callback.h ../machine/stats.h ../threads/alarm.h \
- ../machine/callback.h ../machine/timer.h ../filesys/synchdisk.h \
- ../machine/disk.h ../threads/synch.h ../threads/main.h \
- ../userprog/syscall.h
+ ../filesys/openfile.h ../lib/list.h ../lib/debug.h ../lib/list.cc \
+ ../threads/scheduler.h ../machine/interrupt.h ../machine/callback.h \
+ ../machine/stats.h ../threads/alarm.h ../machine/callback.h \
+ ../machine/timer.h ../filesys/synchdisk.h ../machine/disk.h \
+ ../threads/synch.h ../threads/main.h ../userprog/syscall.h
 synchconsole.o: ../userprog/synchconsole.cc /usr/include/stdc-predef.h \
  ../lib/copyright.h ../userprog/synchconsole.h ../lib/utility.h \
  ../lib/copyright.h ../machine/callback.h ../machine/console.h \
@@ -1993,7 +1992,7 @@ console.o: ../machine/console.cc /usr/include/stdc-predef.h \
  ../userprog/userkernel.h ../threads/kernel.h ../threads/thread.h \
  ../lib/sysdep.h ../machine/machine.h ../machine/translate.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
- ../threads/scheduler.h ../lib/list.h ../lib/debug.h ../lib/list.cc \
+ ../lib/list.h ../lib/debug.h ../lib/list.cc ../threads/scheduler.h \
  ../machine/interrupt.h ../machine/stats.h ../threads/alarm.h \
  ../machine/callback.h ../machine/timer.h ../filesys/synchdisk.h \
  ../machine/disk.h ../threads/synch.h ../threads/main.h
@@ -2087,8 +2086,8 @@ machine.o: ../machine/machine.cc /usr/include/stdc-predef.h \
  /usr/include/i386-linux-gnu/bits/sys_errlist.h /usr/include/string.h \
  ../userprog/userkernel.h ../threads/kernel.h ../threads/thread.h \
  ../lib/sysdep.h ../machine/machine.h ../userprog/addrspace.h \
- ../filesys/filesys.h ../filesys/openfile.h ../threads/scheduler.h \
- ../lib/list.h ../lib/debug.h ../lib/list.cc ../machine/interrupt.h \
+ ../filesys/filesys.h ../filesys/openfile.h ../lib/list.h ../lib/debug.h \
+ ../lib/list.cc ../threads/scheduler.h ../machine/interrupt.h \
  ../machine/callback.h ../machine/stats.h ../threads/alarm.h \
  ../machine/callback.h ../machine/timer.h ../filesys/synchdisk.h \
  ../machine/disk.h ../threads/synch.h ../threads/main.h
@@ -2182,11 +2181,11 @@ mipssim.o: ../machine/mipssim.cc /usr/include/stdc-predef.h \
  ../machine/mipssim.h ../threads/main.h ../userprog/userkernel.h \
  ../threads/kernel.h ../threads/thread.h ../lib/sysdep.h \
  ../machine/machine.h ../userprog/addrspace.h ../filesys/filesys.h \
- ../filesys/openfile.h ../threads/scheduler.h ../lib/list.h \
- ../lib/debug.h ../lib/list.cc ../machine/interrupt.h \
- ../machine/callback.h ../machine/stats.h ../threads/alarm.h \
- ../machine/callback.h ../machine/timer.h ../filesys/synchdisk.h \
- ../machine/disk.h ../threads/synch.h ../threads/main.h
+ ../filesys/openfile.h ../lib/list.h ../lib/debug.h ../lib/list.cc \
+ ../threads/scheduler.h ../machine/interrupt.h ../machine/callback.h \
+ ../machine/stats.h ../threads/alarm.h ../machine/callback.h \
+ ../machine/timer.h ../filesys/synchdisk.h ../machine/disk.h \
+ ../threads/synch.h ../threads/main.h
 translate.o: ../machine/translate.cc /usr/include/stdc-predef.h \
  ../lib/copyright.h ../threads/main.h ../lib/debug.h ../lib/copyright.h \
  ../lib/utility.h ../lib/sysdep.h /usr/include/c++/4.8/iostream \
@@ -2276,11 +2275,11 @@ translate.o: ../machine/translate.cc /usr/include/stdc-predef.h \
  ../userprog/userkernel.h ../threads/kernel.h ../lib/utility.h \
  ../threads/thread.h ../lib/sysdep.h ../machine/machine.h \
  ../machine/translate.h ../userprog/addrspace.h ../filesys/filesys.h \
- ../filesys/openfile.h ../threads/scheduler.h ../lib/list.h \
- ../lib/debug.h ../lib/list.cc ../machine/interrupt.h \
- ../machine/callback.h ../machine/stats.h ../threads/alarm.h \
- ../machine/callback.h ../machine/timer.h ../filesys/synchdisk.h \
- ../machine/disk.h ../threads/synch.h ../threads/main.h
+ ../filesys/openfile.h ../lib/list.h ../lib/debug.h ../lib/list.cc \
+ ../threads/scheduler.h ../machine/interrupt.h ../machine/callback.h \
+ ../machine/stats.h ../threads/alarm.h ../machine/callback.h \
+ ../machine/timer.h ../filesys/synchdisk.h ../machine/disk.h \
+ ../threads/synch.h ../threads/main.h
 synchdisk.o: ../filesys/synchdisk.cc /usr/include/stdc-predef.h \
  ../lib/copyright.h ../filesys/synchdisk.h ../machine/disk.h \
  ../lib/utility.h ../lib/copyright.h ../machine/callback.h \
@@ -2466,7 +2465,7 @@ disk.o: ../machine/disk.cc /usr/include/stdc-predef.h ../lib/copyright.h \
  ../userprog/userkernel.h ../threads/kernel.h ../threads/thread.h \
  ../lib/sysdep.h ../machine/machine.h ../machine/translate.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
- ../threads/scheduler.h ../lib/list.h ../lib/debug.h ../lib/list.cc \
+ ../lib/list.h ../lib/debug.h ../lib/list.cc ../threads/scheduler.h \
  ../machine/interrupt.h ../machine/stats.h ../threads/alarm.h \
  ../machine/callback.h ../machine/timer.h ../filesys/synchdisk.h \
  ../machine/disk.h ../threads/synch.h ../threads/main.h

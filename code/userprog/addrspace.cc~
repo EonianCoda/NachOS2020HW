@@ -126,9 +126,9 @@ AddrSpace::Load(char *fileName)
 		(WordToHost(noffH.noffMagic) == NOFFMAGIC))
     	SwapHeader(&noffH);
     ASSERT(noffH.noffMagic == NOFFMAGIC);
-	cout << "noffH.code.size: " << noffH.code.size << endl;
-	cout << "noffH.initData.size: " << noffH.initData.size << endl;
-        cout << "noffH.uninitData.size: " << noffH.uninitData.size << endl;
+	cout << "noffH.code.size: " noffH.code.size << endl;
+	cout << "noffH.initData.size: " noffH.initData.size << endl;
+        cout << "noffH.uninitData.size: " noffH.uninitData.size << endl;
 
 // how big is address space?
     size = noffH.code.size + noffH.initData.size + noffH.uninitData.size 

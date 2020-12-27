@@ -269,7 +269,7 @@ Machine::OneInstruction(Instruction *instr)
       case OP_LHU:	  
 	tmp = registers[instr->rs] + instr->extra;
 	if (tmp & 0x1) {
-		cout << "Error:tmp & 0x1" << endl;
+		cout << "Error:tmp & 0x1"
 	    RaiseException(AddressErrorException, tmp);
 	    return;
 	}

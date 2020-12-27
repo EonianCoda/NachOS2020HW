@@ -18,7 +18,7 @@
 #include <string.h>
 #include "list.h"
 
-#define UserStackSize		2048 	// increase this as necessary!
+#define UserStackSize		1024 	// increase this as necessary!
 
 
 
