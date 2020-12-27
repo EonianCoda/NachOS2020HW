@@ -282,9 +282,9 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 
 				cout << "number of " << phyPageVic << " page swap out" << endl;
 				delete buf2;
+				cout << "page replacement finished" << endl;
 			}
-			cout << "page replacement finished" << endl;
-
+			
 			delete buf;
 			// return PageFaultException;
 		}
