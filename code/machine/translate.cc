@@ -212,7 +212,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
     offset = (unsigned) virtAddr % PageSize;
     
     if (tlb == NULL) // => page table => vpn is index into table
-	{		
+	{	
 		if (vpn >= pageTableSize) 
 		{
 			DEBUG(dbgAddr, "Illegal virtual page # " << virtAddr);
@@ -220,11 +220,8 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 		} 
 		else if (!pageTable[vpn].valid) 
 		{
+			kernel->stats->numPageFaults ++;
 			cout << "page fault" << endl;
-
-			//count virtual page number
-			// unsigned int vpn = (unsigned)kernel->machine->ReadRegister(PCReg)/ PageSize;
-
 
 			//get the missing page
 			TranslationEntry *missingPage = &pageTable[vpn];
@@ -248,6 +245,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 				AddrSpace::orderOfPages.Append(j);
 				//load missing page in main memory
 				bcopy(buf, &kernel->machine->mainMemory[j * PageSize], PageSize);
+				cout << "Use empty physical memory page" << endl;
 			}
 			//Physical memory isn't enough, page replacement occur
 			else
