@@ -126,9 +126,9 @@ AddrSpace::Load(char *fileName)
 		(WordToHost(noffH.noffMagic) == NOFFMAGIC))
     	SwapHeader(&noffH);
     ASSERT(noffH.noffMagic == NOFFMAGIC);
-	cout << "noffH.code.size: " noffH.code.size << endl;
-	cout << "noffH.initData.size: " noffH.initData.size << endl;
-        cout << "noffH.uninitData.size: " noffH.uninitData.size << endl;
+	//cout << "noffH.code.size: " << noffH.code.size << endl;
+	//cout << "noffH.initData.size: " << noffH.initData.size << endl;
+        //cout << "noffH.uninitData.size: " << noffH.uninitData.size << endl;
 
 // how big is address space?
     size = noffH.code.size + noffH.initData.size + noffH.uninitData.size 
@@ -160,7 +160,7 @@ AddrSpace::Load(char *fileName)
 
         AddrSpace::invertedTable[j] = &pageTable[i];
         AddrSpace::orderOfPages.Append(j);
-	cout << "Use physical page: " << j << endl;
+	//cout << "Use physical page: " << j << endl;
     }
     //use virtual memory, when physical memory isn't enough
     for(unsigned int j=0; i < numPages; i++){
@@ -175,9 +175,9 @@ AddrSpace::Load(char *fileName)
         pageTable[i].use = false;
         pageTable[i].dirty = false;
         pageTable[i].readOnly = false;
-	cout << "Use virtul page: " << j << endl;
+	//cout << "Use virtul page: " << j << endl;
     }
-    cout << "start init address into memory" << endl;
+   // cout << "start init address into memory" << endl;
 
     size = numPages * PageSize;
 
@@ -216,7 +216,7 @@ AddrSpace::Load(char *fileName)
     {
         // DEBUG(dbgAddr, "Initializing data segment.");
 	    // DEBUG(dbgAddr, noffH.initData.virtualAddr << ", " << noffH.initData.size);
-	cout << "noffH.intiData virtual addr:" <<  noffH.initData.virtualAddr << endl;
+	//cout << "noffH.intiData virtual addr:" <<  noffH.initData.virtualAddr << endl;
         executable->ReadAt(&(kernel->machine->mainMemory[noffH.initData.virtualAddr]),
                             noffH.initData.size, noffH.initData.inFileAddr);
     }
