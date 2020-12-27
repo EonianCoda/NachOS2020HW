@@ -86,73 +86,7 @@ ExceptionHandler(ExceptionType which)
 			}
 			break;
 		case PageFaultException:
-		{
-			cout << "page fault" << endl;
-
-			//count virtual page number
-			unsigned int vpn = (unsigned)kernel->machine->ReadRegister(PCReg)/ PageSize;
-			//get the missing page
-			TranslationEntry *missingPage = &kernel->machine->pageTable[vpn];
-
-			//find empty physical memory page
-			int j = 0;
-			while(j < NumPhysPages && AddrSpace::usedPhyPage[j] == true) j++;
-
-			//read page from virtual memory
-			char *buf = new char[PageSize];
-			kernel->virtualMemory->ReadSector(missingPage->virtualMemPage, buf);
-
-
-			//Physical memory is enough, swap page in main memory
-			if(j != 32)
-			{
-				missingPage->physicalPage = j;
-				missingPage->valid = true;
-				AddrSpace::usedPhyPage[j] = true;
-				AddrSpace::usedVirPage[missingPage->virtualMemPage] = false;
-				//load missing page in main memory
-				bcopy(buf, &kernel->machine->mainMemory[j * PageSize], PageSize);
-			}
-			//Physical memory isn't enough, page replacement occur
-			else
-			{
-				char *buf2 = new char[PageSize];
-				if(kernel->pra == FIFO)
-				{
-					cout << "FIFO Swapping" << endl;
-					
-				}
-				else if(kernel->pra == LRU)
-				{
-					cout << "LRU Swapping" << endl;
-				}
-				unsigned int phyPageVic = AddrSpace::orderOfPages.RemoveFront(); // find the earliest used page
-				TranslationEntry *victim = AddrSpace::invertedTable[phyPageVic]; //find the victim
-				AddrSpace::invertedTable[phyPageVic] = missingPage; 
-				AddrSpace::orderOfPages.Append(phyPageVic);
-
-				missingPage->physicalPage = phyPageVic;
-				missingPage->valid = true;
-
-				victim->virtualMemPage = missingPage->virtualMemPage;
-				victim->valid = false;
-
-				//read victim's data and write in virtual memory
-				bcopy(&kernel->machine->mainMemory[phyPageVic * PageSize] , buf2, PageSize);
-				kernel->virtualMemory->WriteSector(missingPage->virtualMemPage, buf2);
-
-				//load missing page in main memory
-				bcopy(buf, &kernel->machine->mainMemory[phyPageVic * PageSize], PageSize);
-
-				cout << "number of " << phyPageVic << " page swap out" << endl;
-				delete buf2;
-			}
-			cout << "page replacement finished" << endl;
-
-			delete buf;
-		}
-			
-			return;
+			break;
 		default:
 			cerr << "Unexpected user mode exception" << which << "\n";
 			break;
