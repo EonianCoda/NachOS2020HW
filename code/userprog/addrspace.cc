@@ -180,7 +180,8 @@ AddrSpace::Load(char *fileName)
    // cout << "start init address into memory" << endl;
     if(i != numPages)
     {
-        
+        cout << "Virtual page isn't enough" << endl; 
+        ASSERT(i == numPages);
     }
 
     size = numPages * PageSize;
