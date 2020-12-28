@@ -18,7 +18,7 @@
 #include <string.h>
 #include "list.h"
 
-#define UserStackSize		1024 	// increase this as necessary!
+#define UserStackSize		2048 	// increase this as necessary!
 
 
 
@@ -28,7 +28,7 @@ class AddrSpace {
     ~AddrSpace();			// De-allocate an address space
 
     static bool usedPhyPage[NumPhysPages];
-    static bool usedVirPage[NumPhysPages];
+    static bool usedVirPage[NumVirPages];
     static TranslationEntry *invertedTable[NumPhysPages];
     static List<unsigned int> orderOfPages;
 

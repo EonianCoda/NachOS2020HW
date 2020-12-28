@@ -30,7 +30,7 @@
 
 
 bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
-bool AddrSpace::usedVirPage[NumPhysPages] = {0};
+bool AddrSpace::usedVirPage[NumVirPages] = {0};
 TranslationEntry *AddrSpace::invertedTable[NumPhysPages] = {NULL};
 List<unsigned int> AddrSpace::orderOfPages;
 
@@ -160,9 +160,9 @@ AddrSpace::Load(char *fileName)
     }
     //use virtual memory, when physical memory isn't enough
     for(unsigned int j=0; i < numPages; i++){
-        while(j < NumPhysPages && AddrSpace::usedVirPage[j] == true) j++;
+        while(j < NumVirPages && AddrSpace::usedVirPage[j] == true) j++;
         // check if physical memory lack
-        if(j == NumPhysPages) break;
+        if(j == NumVirPages) break;
 
         pageTable[i].virtualPage = i;
         pageTable[i].virtualMemPage = j;
