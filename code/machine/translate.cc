@@ -242,6 +242,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 				missingPage->valid = true;
 				AddrSpace::usedPhyPage[j] = true;
 				AddrSpace::usedVirPage[missingPage->virtualMemPage] = false;
+				AddrSpace::invertedTable[j] = missingPage;
 				AddrSpace::orderOfPages.Append(j);
 				//load missing page in main memory
 				bcopy(buf, &kernel->machine->mainMemory[j * PageSize], PageSize);

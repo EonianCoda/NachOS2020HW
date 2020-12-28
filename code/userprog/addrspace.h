@@ -20,8 +20,6 @@
 
 #define UserStackSize		2048 	// increase this as necessary!
 
-
-
 class AddrSpace {
   public:
     AddrSpace();			// Create an address space.

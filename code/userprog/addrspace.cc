@@ -178,6 +178,10 @@ AddrSpace::Load(char *fileName)
 	//cout << "Use virtul page: " << j << endl;
     }
    // cout << "start init address into memory" << endl;
+    if(i != numPages)
+    {
+        
+    }
 
     size = numPages * PageSize;
 
